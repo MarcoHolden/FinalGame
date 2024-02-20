@@ -11,14 +11,8 @@ class GameEngine(object):
 
     def __init__(self):       
         self.kirby = Kirby((0,0))
-        self.kirby.image = pygame.transform.scale_by(self.kirby.image, 4.25)
-
         self.dragon = Dragon((0, 0))
-        self.dragon.image = pygame.transform.scale_by(self.dragon.image, 0.10)
-
         self.bob = Bob((0,0))
-        self.bob.image = pygame.transform.scale_by(self.bob.image, 0.20)
-
         self.size = vec(*RESOLUTION)
         self.background1 = Drawable((0,0), "background4.png")
 
