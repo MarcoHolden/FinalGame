@@ -3,6 +3,7 @@ from . import TextEntry, EventMenu
 from utils import vec, RESOLUTION
 from gameObjects.engine import GameEngine
 
+
 from pygame.locals import *
 
 class ScreenManager(object):
@@ -15,8 +16,8 @@ class ScreenManager(object):
         size = self.pausedText.getSize()
         midpoint = RESOLUTION // 2 - size
         self.pausedText.position = vec(*midpoint)
-        
-        self.mainMenu = EventMenu("menuBackground.jpg", fontName="default8")
+
+        self.mainMenu = EventMenu("background.png", fontName="default8")
         self.mainMenu.addOption("start", "Press 1 to start Game",
                                  RESOLUTION // 2 - vec(0,50),
                                  lambda x: x.type == KEYDOWN and x.key == K_1,

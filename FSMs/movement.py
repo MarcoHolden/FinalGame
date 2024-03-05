@@ -10,8 +10,12 @@ class MovementFSM(AbstractGameFSM):
     
     def update(self, seconds):
         super().update(seconds)
-        
-        pass # Add out of bounds checks here
+
+        if self.obj.position[0] < 0:
+            self.obj.velocity[0] = max(self.obj.velocity[0], 0)
+        elif self.obj.position[0] > 2100 - self.obj.getSize()[0]:
+            self.obj.velocity[0] = min(self.obj.velocity[0],0)
+
         
 
 
