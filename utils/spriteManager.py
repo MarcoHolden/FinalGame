@@ -35,14 +35,15 @@ class SpriteManager(object):
       # Static information about the sprite sizes of particular image sheets.
       _SPRITE_SIZES = {
          "dragon1.png" : (90, 70),
-         "bob.png" : (56, 60)
+         "bob.png" : (56, 60),
+
       }
       
       # A default sprite size
       _DEFAULT_SPRITE = (16,16)
       
       # A list of images that require to be loaded with transparency
-      _TRANSPARENCY = ['bob.png', 'dragon1.png']
+      _TRANSPARENCY = ['bob.png', 'dragon1.png', 'background1.png', 'background2.png', 'background3.png', 'background4.png']
       
       # A list of images that require to be loaded with a color key
       _COLOR_KEY = ["kirby.png", "arrow.png", "hat.png", 'dragon2.png', 'dragon3.png', 'dragon4.png']
