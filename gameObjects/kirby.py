@@ -1,4 +1,4 @@
-from . import Mobile
+from . import MobileGravity
 from FSMs import WalkingFSM, AccelerationFSM
 from utils import vec, RESOLUTION
 
@@ -9,7 +9,7 @@ import numpy as np
 from gameObjects import Drawable
 
 
-class Kirby(Mobile):
+class Kirby(MobileGravity):
    def __init__(self, position):
       super().__init__(position, "kirby.png")
 

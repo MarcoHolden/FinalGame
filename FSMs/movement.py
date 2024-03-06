@@ -1,6 +1,6 @@
 from . import AbstractGameFSM
 from utils import vec, magnitude, EPSILON, scale, RESOLUTION
-
+from FSMs import AnimateFSM
 from statemachine import State
 
 class MovementFSM(AbstractGameFSM):
@@ -66,3 +66,81 @@ class AccelerationFSM(MovementFSM):
         
     
         super().update(seconds)
+
+class GravityFSM(AbstractGameFSM):
+    def __init__(self, obj):
+        super().__init__(obj)
+        self.jumpTimer = 0
+        self.gravity = 200
+        self.jumpSpeed = 100
+        self.jumpTime = 0.2
+
+        grounded = State(initial=True)
+        jumping = State()
+        falling = State()
+
+        jump = grounded.to(jumping) | falling.to.itself(internal=True)
+        fall = jumping.to(falling) | grounded.to(falling)
+        land = falling.to(grounded) | jumping.to(grounded)
+
+        def updateState(self):
+            if self.canFall() and self == "jumping":
+                self.fall()
+
+        def canFall(self):
+            return self.jumpTimer < 0
+
+        def on_enter_jumping(self):
+            self.jumpTimer = self.jumpTime
+
+        def update(self, seconds=0):
+            if self == "falling":
+                self.obj.velocity[1] += self.gravity * seconds
+            elif self == "jumping":
+                self.obj.velocity[1] = -self.jumpSpeed
+            else:
+                self.obj.velocity[1] = 0
+
+class JumpingFSM(AnimateFSM):
+    standing = State(initial=True)
+    moving = State()
+    falling = State()
+    jumping = State()
+
+    move = standing.to(moving)
+    stop = moving.to(standing)
+    jump = standing.to(jumping) | moving.to(jumping) | \
+           falling.to.itself(internal=True)
+    fall = standing.to(falling) | moving.to(falling) | jumping.to(falling)
+
+    land = falling.to(moving, cond="hasVelocity") | \
+           falling.to(standing, cond="noVelocity") | \
+           jumping.to(moving, cond="hasVelocity") | \
+           jumping.to(standing, cond="noVelocity")
+
+    def hasVelocity(self):
+        return magnitude(self.obj.velocity) > EPSILON
+
+    def noVelocity(self):
+        return not self.hasVelocity()
+
+    def isFalling(self):
+        return self.obj.velocity[1] > EPSILON
+
+    def isJumping(self):
+        return self.obj.velocity[1] < -EPSILON
+
+    def isGrounded(self):
+        return not self.isFalling() and not self.isJumping()
+
+    def updateState(self):
+        if self.isJumping() and self != "jumping":
+            self.jump()
+        elif self.isFalling() and self != "falling":
+            self.fall()
+        elif self.isGrounding() and self not in ["standing", "moving"]:
+            self.land()
+        elif self.hasVelocity() and self not in ["moving", "falling", "jumping"]:
+            self.move()
+        elif self.noVelocity() and self not in ["standing", "falling", "jumping"]:
+            self.stop()
