@@ -83,23 +83,23 @@ class GravityFSM(AbstractGameFSM):
         fall = jumping.to(falling) | grounded.to(falling)
         land = falling.to(grounded) | jumping.to(grounded)
 
-        def updateState(self):
-            if self.canFall() and self == "jumping":
-                self.fall()
+    def updateState(self):
+        if self.canFall() and self == "jumping":
+            self.fall()
 
-        def canFall(self):
-            return self.jumpTimer < 0
+    def canFall(self):
+        return self.jumpTimer < 0
 
-        def on_enter_jumping(self):
-            self.jumpTimer = self.jumpTime
+    def on_enter_jumping(self):
+        self.jumpTimer = self.jumpTime
 
-        def update(self, seconds=0):
-            if self == "falling":
-                self.obj.velocity[1] += self.gravity * seconds
-            elif self == "jumping":
-                self.obj.velocity[1] = -self.jumpSpeed
-            else:
-                self.obj.velocity[1] = 0
+    def update(self, seconds=0):
+        if self == "falling":
+            self.obj.velocity[1] += self.gravity * seconds
+        elif self == "jumping":
+            self.obj.velocity[1] = -self.jumpSpeed
+        else:
+            self.obj.velocity[1] = 0
 
 class JumpingFSM(AnimateFSM):
     standing = State(initial=True)
