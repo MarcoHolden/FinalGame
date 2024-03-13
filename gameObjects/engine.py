@@ -25,6 +25,7 @@ class GameEngine(object):
         self.earth4 = Drawable((1539, 790), "earth2.png")
         self.earth5 = Drawable((1410, 590), "earth2.png")
         self.earth6 = Drawable((1923, 590), "earth2.png")
+        self.earths = [self.earth1, self.earth2, self.earth3, self.earth4, self.earth5, self.earth6]
     def draw(self, drawSurface):
         self.background0.draw(drawSurface)
         self.background4.draw(drawSurface)
@@ -47,7 +48,7 @@ class GameEngine(object):
         self.bob.handleEvent(event)
     
     def update(self, seconds):
-        self.kirby.update(seconds)
+        self.kirby.update(seconds, self.earths)
 
         self.dragon.update(seconds)
         self.bob.update(seconds)

@@ -1,6 +1,6 @@
 from . import AbstractGameFSM
 from utils import vec, magnitude, EPSILON, scale, RESOLUTION
-
+from FSMs import AnimateFSM
 from statemachine import State
 
 class MovementFSM(AbstractGameFSM):
@@ -50,9 +50,13 @@ class AccelerationFSM(MovementFSM):
     def update(self, seconds=0):
         if self == "positive":
             self.obj.velocity += self.direction * self.accel * seconds
+            self.obj.velocity += self.direction * self.accel * seconds
+            if self.axis == 0:
+                self.obj.flipImage[0] = False
         elif self == "negative":
             self.obj.velocity -= self.direction * self.accel * seconds
-                
+            if self.axis == 0:
+                self.obj.flipImage[0] = True
         elif self == "stalemate":
             pass
         else:
@@ -66,3 +70,44 @@ class AccelerationFSM(MovementFSM):
         
     
         super().update(seconds)
+
+class GravityFSM(AbstractGameFSM):
+    standing = State(initial=True)
+    jumping = State()
+    falling = State()
+
+    jump = standing.to(jumping) | falling.to.itself(internal=True)
+    fall = jumping.to(falling) | standing.to(falling)
+    land = falling.to(standing) | jumping.to(standing)
+
+    stop_jump = jumping.to(falling) | jumping.to(standing) | standing.to.itself(internal=True) | falling.to.itself(internal=True)
+
+    def __init__(self, obj):
+        super().__init__(obj)
+        self.jumpTimer = 0
+        self.gravity = 200
+        self.jumpSpeed = 100
+        self.jumpTime = 0.2
+
+
+
+    def updateState(self):
+        if self.canFall() and self == "jumping":
+            self.fall()
+
+    def canFall(self):
+        return self.jumpTimer < 0
+
+    def on_enter_jumping(self):
+        self.jumpTimer = self.jumpTime
+
+    def update(self, seconds=0):
+        if self == "falling":
+            self.obj.velocity[1] += self.gravity * seconds
+        elif self == "jumping":
+            self.jumpTimer -= seconds
+            self.obj.velocity[1] = -self.jumpSpeed
+        else:
+            self.obj.velocity[1] = 0
+        super().update(seconds)
+
