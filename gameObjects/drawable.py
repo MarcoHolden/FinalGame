@@ -32,9 +32,15 @@ class Drawable(object):
         
         self.position  = vec(*position)
         self.imageName = fileName
+        self.flipImage = [False, False]
     
     def draw(self, drawSurface):
-        drawSurface.blit(self.image, list(map(int, self.position - Drawable.OFFSET)))
+        blitImage = self.image
+
+        if self.flipImage[0] or self.flipImage[1]:
+            blitImage = pygame.transform.flip(self.image, *self.flipImage)
+
+        drawSurface.blit(blitImage, list(map(int, self.position - Drawable.OFFSET)))
             
     def getSize(self):
         return vec(*self.image.get_size())

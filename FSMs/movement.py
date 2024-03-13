@@ -50,9 +50,13 @@ class AccelerationFSM(MovementFSM):
     def update(self, seconds=0):
         if self == "positive":
             self.obj.velocity += self.direction * self.accel * seconds
+            self.obj.velocity += self.direction * self.accel * seconds
+            if self.axis == 0:
+                self.obj.flipImage[0] = False
         elif self == "negative":
             self.obj.velocity -= self.direction * self.accel * seconds
-                
+            if self.axis == 0:
+                self.obj.flipImage[0] = True
         elif self == "stalemate":
             pass
         else:
@@ -68,15 +72,15 @@ class AccelerationFSM(MovementFSM):
         super().update(seconds)
 
 class GravityFSM(AbstractGameFSM):
-    grounded = State(initial=True)
+    standing = State(initial=True)
     jumping = State()
     falling = State()
 
-    jump = grounded.to(jumping) | falling.to.itself(internal=True)
-    fall = jumping.to(falling) | grounded.to(falling)
-    land = falling.to(grounded) | jumping.to(grounded)
+    jump = standing.to(jumping) | falling.to.itself(internal=True)
+    fall = jumping.to(falling) | standing.to(falling)
+    land = falling.to(standing) | jumping.to(standing)
 
-    stop_jump = jumping.to(falling) | jumping.to(grounded)
+    stop_jump = jumping.to(falling) | jumping.to(standing) | standing.to.itself(internal=True) | falling.to.itself(internal=True)
 
     def __init__(self, obj):
         super().__init__(obj)
@@ -101,6 +105,7 @@ class GravityFSM(AbstractGameFSM):
         if self == "falling":
             self.obj.velocity[1] += self.gravity * seconds
         elif self == "jumping":
+            self.jumpTimer -= seconds
             self.obj.velocity[1] = -self.jumpSpeed
         else:
             self.obj.velocity[1] = 0

@@ -16,7 +16,6 @@ class MobileGravity(Mobile):
 
         if self.UD == "falling":
             for item in colliders:
-                print(self.position)
                 if self.position[0] >= item.getCollisionRect()[0] and self.position[0] <= item.getCollisionRect()[0]+513 and self.position[1] >= item.getCollisionRect()[1]-self.getSize()[1]:
                     self.UD.land()
                     self.position[1] = item.getCollisionRect()[1]-self.getSize()[1]

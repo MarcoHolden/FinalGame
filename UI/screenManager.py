@@ -2,7 +2,7 @@ from FSMs import ScreenManagerFSM
 from . import TextEntry, EventMenu
 from utils import vec, RESOLUTION
 from gameObjects.engine import GameEngine
-
+from UI.soundManager import SoundManager
 
 from pygame.locals import *
 
@@ -39,6 +39,8 @@ class ScreenManager(object):
             self.mainMenu.draw(drawSurf)
     
     def handleEvent(self, event):
+        sm = SoundManager.getInstance()
+
         if self.state in ["game", "paused"]:
             if event.type == KEYDOWN and event.key == K_m:
                 self.state.quitGame()
@@ -52,6 +54,7 @@ class ScreenManager(object):
             
             if choice == "start":
                 self.state.startGame()
+                sm.playBGM("music1.mp3")
             elif choice == "exit":
                 return "exit"
      

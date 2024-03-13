@@ -1,6 +1,7 @@
 from . import MobileGravity
-from FSMs import WalkingFSM, AccelerationFSM, GravityFSM
+from FSMs import JumpingFSM, AccelerationFSM, GravityFSM
 from utils import vec, RESOLUTION
+from UI.soundManager import SoundManager
 
 from pygame.locals import *
 
@@ -36,13 +37,13 @@ class Kirby(MobileGravity):
       }
       
       self.framesPerSecondList = {
-         "falling" : 10,
-         "jumping" : 2,
+         "falling" : 8,
+         "jumping" : 3,
          "moving"   : 8,
          "standing" : 2
       }
             
-      self.FSManimated = WalkingFSM(self)
+      self.FSManimated = JumpingFSM(self)
       self.LR = AccelerationFSM(self, axis=0)
       self.UD = GravityFSM(self)
       
@@ -50,10 +51,13 @@ class Kirby(MobileGravity):
    def handleEvent(self, event):
       if event.type == KEYDOWN:
          if event.key == K_UP:
+            sm = SoundManager.getInstance()
+            ch = sm.playSFX("soundeffect1.wav")
             self.UD.jump()
              
          elif event.key == K_DOWN:
-            self.UD.increase()
+            #self.UD.increase()
+            pass
             
          elif event.key == K_LEFT:
             self.LR.decrease()
@@ -66,8 +70,8 @@ class Kirby(MobileGravity):
             self.UD.stop_jump()
              
          elif event.key == K_DOWN:
-            self.UD.stop_increase()
-
+            #self.UD.stop_increase()
+            pass
 
             
          elif event.key == K_LEFT:
