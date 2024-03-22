@@ -73,7 +73,6 @@ class JumpingFSM(AnimateFSM):
         return not self.isFalling() and not self.isJumping()
 
     def updateState(self):
-        print(self)
         if self.isJumping() and self != "jumping":
             self.jump()
         elif self.isFalling() and self != "falling":
