@@ -46,14 +46,16 @@ class SpriteManager(object):
       _TRANSPARENCY = ['bob.png', 'dragon1.png', 'background1.png', 'background2.png', 'background3.png', 'background4.png']
       
       # A list of images that require to be loaded with a color key
-      _COLOR_KEY = ["kirby.png", "arrow.png", "hat.png", 'dragon2.png', 'dragon3.png', 'dragon4.png']
+      _COLOR_KEY = ["kirby.png", "arrow.png", "hat.png", 'dragon2.png', 'dragon3.png', 'dragon4.png', 'square2.png', "arrow3.png"]
 
       _SCALE = {
          "bob.png" : 0.10,
-         "dragon1.png" : 0.07
+         "dragon1.png" : 0.07,
+         "square2.png" : 0.10,
+         "arrow3.png" : 0.17,
       }
       _FLIP = {
-         "dragon1.png": True
+         "dragon1.png": False
       }
       def __init__(self):
          # Stores the surfaces indexed based on file name

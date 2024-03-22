@@ -77,8 +77,8 @@ class GravityFSM(AbstractGameFSM):
     falling = State()
 
     jump = standing.to(jumping) | falling.to.itself(internal=True)
-    fall = jumping.to(falling) | standing.to(falling)
-    land = falling.to(standing) | jumping.to(standing)
+    fall = jumping.to(falling) | standing.to(falling) | falling.to.itself(internal=True)
+    land = falling.to(standing) | jumping.to(standing) | standing.to.itself(internal=True)
 
     stop_jump = jumping.to(falling) | jumping.to(standing) | standing.to.itself(internal=True) | falling.to.itself(internal=True)
 
@@ -86,7 +86,7 @@ class GravityFSM(AbstractGameFSM):
         super().__init__(obj)
         self.jumpTimer = 0
         self.gravity = 200
-        self.jumpSpeed = 100
+        self.jumpSpeed = 150
         self.jumpTime = 0.2
 
 

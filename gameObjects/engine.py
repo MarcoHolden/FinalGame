@@ -26,17 +26,27 @@ class GameEngine(object):
         self.earth5 = Drawable((1410, 590), "earth2.png")
         self.earth6 = Drawable((1923, 590), "earth2.png")
         self.earths = [self.earth1, self.earth2, self.earth3, self.earth4, self.earth5, self.earth6]
+        self.square = Drawable((144, 710), "square2.png")
+        self.square1 = Drawable((156, 710), "square2.png")
+        self.square2 = Drawable((168, 710), "square2.png")
+        self.square3 = Drawable((180, 710), "square2.png")
+        self.square4 = Drawable((500, 715), "square2.png")
+        self.square5 = Drawable((100, 715), "square2.png")
+        self.square6 = Drawable((400, 715), "square2.png")
+        self.square7 = Drawable((300, 715), "square2.png")
+        self.square8 = Drawable((100, 470), "square2.png")
+        self.squares = [self.square, self.square1, self.square2, self.square3, self.square4, self.square5, self.square6, self.square7, self.square8]
+        self.arrow = Drawable((50, 773), "arrow3.png")
+        self.kirbyColliders = [self.square, self.square1, self.square2, self.square3, self.square4, self.square5, self.square6, self.square7, self.square8, self.earth1, self.earth2, self.earth3, self.earth4, self.earth5, self.earth6]
+
     def draw(self, drawSurface):
         self.background0.draw(drawSurface)
         self.background4.draw(drawSurface)
         self.background3.draw(drawSurface)
         self.background1.draw(drawSurface)
-        self.earth1.draw(drawSurface)
-        self.earth2.draw(drawSurface)
-        self.earth3.draw(drawSurface)
-        self.earth4.draw(drawSurface)
-        self.earth5.draw(drawSurface)
-        self.earth6.draw(drawSurface)
+        for i in self.kirbyColliders:
+            i.draw(drawSurface)
+        self.arrow.draw(drawSurface)
         self.kirby.draw(drawSurface)
         self.dragon.draw(drawSurface)
         self.bob.draw(drawSurface)
@@ -48,7 +58,7 @@ class GameEngine(object):
         self.bob.handleEvent(event)
     
     def update(self, seconds):
-        self.kirby.update(seconds, self.earths)
+        self.kirby.update(seconds, self.kirbyColliders)
 
         self.dragon.update(seconds)
         self.bob.update(seconds)
